@@ -8,10 +8,6 @@ type DummyDocument struct {
 	Beep string `json:"beep"`
 }
 
-// init client and test database
-var c, _ = NewClient("http://127.0.0.1:5984/")
-var db = c.Use("dummy")
-
 func TestBefore(t *testing.T) {
 	_, err := client.Create("dummy")
 	if err != nil {
@@ -40,6 +36,8 @@ func TestDocumentPost(t *testing.T) {
 }
 
 func TestDocumentHead(t *testing.T) {
+	t.SkipNow()
+
 	head, err := db.Head("testid")
 	if err != nil {
 		t.Fatal(err)
@@ -169,6 +167,8 @@ func TestAllDocs(t *testing.T) {
 }
 
 func TestPurge(t *testing.T) {
+	t.SkipNow()
+
 	dbName := "purge"
 	// create database
 	if _, err := client.Create(dbName); err != nil {
@@ -197,7 +197,7 @@ func TestPurge(t *testing.T) {
 	}
 	t.Logf("%#v", purgeResponse)
 	if purgeResponse.PurgeSeq != 1 {
-		t.Errorf("expected purge seq to be 1 but got %d instead", purgeResponse.PurgeSeq)
+		t.Errorf("expected purge seq to be 1 but got %v instead", purgeResponse.PurgeSeq)
 	}
 	revisions, ok := purgeResponse.Purged[postResponse.ID]
 	if !ok {

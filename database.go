@@ -198,6 +198,7 @@ func (db *Database) Purge(req map[string][]string) (*PurgeResponse, error) {
 	return response, json.NewDecoder(body).Decode(&response)
 }
 
+// Element (?)
 type Element struct {
 	Names []string `json:"names"`
 	Roles []string `json:"roles"`

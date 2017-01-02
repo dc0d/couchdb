@@ -89,11 +89,49 @@ type DesignDocument struct {
 	Language string                        `json:"language,omitempty"`
 	Views    map[string]DesignDocumentView `json:"views,omitempty"`
 	Filters  map[string]string             `json:"filters,omitempty"`
+	/*
+		function(newDoc, oldDoc, userCtx) {
+			function require(field, message) {
+				message = message || "Document must have a " + field;
+				if (!newDoc[field]) throw({forbidden : message});
+			};
+
+			function unchanged(field) {
+				if (oldDoc && toJSON(oldDoc[field]) != toJSON(newDoc[field]))
+				throw({forbidden : "Field can’t be changed: " + field});
+			}
+
+			if (newDoc.type == "post") {
+				require("title");
+				require("created_at");
+				require("body");
+				require("author");
+
+				unchanged("created_at");
+			}
+
+			if (newDoc.type == "comment") {
+				require("name");
+				require("created_at");
+				require("comment", "You may not leave an empty comment");
+
+				unchanged("created_at");
+			}
+		}
+	*/
+	ValidateDocUpdate string            `json:"validate_doc_update,omitempty"`
+	Shows             map[string]string `json:"shows,omitempty"`
+	Lists             map[string]string `json:"lists,omitempty"`
 }
 
 // Name returns design document name without the "_design/" prefix
-func (dd DesignDocument) Name() string {
+func (dd *DesignDocument) Name() string {
 	return strings.TrimPrefix(dd.ID, "_design/")
+}
+
+// SetName sets the name and adds the "_design/" prefix
+func (dd *DesignDocument) SetName(name string) {
+	dd.ID = "_design/" + name
 }
 
 // DesignDocumentView contains map/reduce functions.

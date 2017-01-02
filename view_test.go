@@ -23,9 +23,6 @@ type Person struct {
 	Gender string  `json:"gender"`
 }
 
-var cView, _ = NewClient("http://127.0.0.1:5984/")
-var dbView = cView.Use("gotest")
-
 func TestViewBefore(t *testing.T) {
 	// create database
 	if _, err := cView.Create("gotest"); err != nil {
